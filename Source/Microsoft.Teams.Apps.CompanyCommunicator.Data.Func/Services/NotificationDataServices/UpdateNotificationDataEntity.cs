@@ -55,6 +55,11 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Data.Func.Services.Notificati
         public string Status { get; set; }
 
         /// <summary>
+        /// Gets or sets number of times the Adaptive Card Url has been clicked.
+        /// </summary>
+        public int? ClickedUrlCounter { get; set; }
+
+        /// <summary>
         /// Checks if the notification is completed.
         /// </summary>
         /// <returns>If the notification is completed.</returns>

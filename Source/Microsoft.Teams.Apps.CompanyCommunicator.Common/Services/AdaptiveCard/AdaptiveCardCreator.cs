@@ -13,6 +13,10 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
     /// </summary>
     public class AdaptiveCardCreator
     {
+        private readonly string redirecturl = "https://sabcommunicator01.azurewebsites.net/redirect?";
+        private readonly string urlparam = "url=";
+        private readonly string rowkeyparam = "rowkey=";
+
         /// <summary>
         /// Creates an adaptive card.
         /// </summary>
@@ -26,7 +30,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
                 notificationDataEntity.Summary,
                 notificationDataEntity.Author,
                 notificationDataEntity.ButtonTitle,
-                notificationDataEntity.ButtonLink);
+                notificationDataEntity.ButtonLink,
+                notificationDataEntity.RowKey);
         }
 
         /// <summary>
@@ -45,7 +50,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
             string summary,
             string author,
             string buttonTitle,
-            string buttonUrl)
+            string buttonUrl,
+            string rowkey)
         {
             var version = new AdaptiveSchemaVersion(1, 0);
             AdaptiveCard card = new AdaptiveCard(version);
@@ -95,7 +101,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
                 card.Actions.Add(new AdaptiveOpenUrlAction()
                 {
                     Title = buttonTitle,
-                    Url = new Uri(buttonUrl, UriKind.RelativeOrAbsolute),
+                    Url = new Uri(this.redirecturl + this.urlparam + buttonUrl + "&" + this.rowkeyparam + rowkey, UriKind.RelativeOrAbsolute),
                 });
             }
 
