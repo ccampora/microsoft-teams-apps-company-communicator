@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d0471924.chunk.css",
+    "main.js": "/static/js/main.6d6afc51.chunk.js",
+    "main.js.map": "/static/js/main.6d6afc51.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.94f2678d.js",
+    "runtime-main.js.map": "/static/js/runtime-main.94f2678d.js.map",
+    "static/js/2.438758e4.chunk.js": "/static/js/2.438758e4.chunk.js",
+    "static/js/2.438758e4.chunk.js.map": "/static/js/2.438758e4.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.a46f89388eea7321a2678509ab9f94ca.js": "/precache-manifest.a46f89388eea7321a2678509ab9f94ca.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.d0471924.chunk.css.map": "/static/css/main.d0471924.chunk.css.map",
+    "static/js/2.438758e4.chunk.js.LICENSE.txt": "/static/js/2.438758e4.chunk.js.LICENSE.txt",
+    "static/media/TeamsAssets-Light.eot": "/static/media/TeamsAssets-Light.03c2e862.eot",
+    "static/media/TeamsAssets-Light.woff": "/static/media/TeamsAssets-Light.4521ef7e.woff",
+    "static/media/TeamsAssets-Light.ttf": "/static/media/TeamsAssets-Light.5c50f55f.ttf",
+    "static/media/TeamsAssets-Light.svg": "/static/media/TeamsAssets-Light.9c0b4d34.svg",
+    "static/media/TeamsAssets-Light.woff2": "/static/media/TeamsAssets-Light.d7d7eb79.woff2",
+    "static/media/TeamsAssets-Regular.woff2": "/static/media/TeamsAssets-Regular.2de16aab.woff2",
+    "static/media/TeamsAssets-Regular.woff": "/static/media/TeamsAssets-Regular.2ed5eaea.woff",
+    "static/media/TeamsAssets-Regular.ttf": "/static/media/TeamsAssets-Regular.76f7e592.ttf",
+    "static/media/TeamsAssets-Regular.eot": "/static/media/TeamsAssets-Regular.c5a2112b.eot",
+    "static/media/TeamsAssets-Regular.svg": "/static/media/TeamsAssets-Regular.de8a9eb1.svg",
+    "static/media/getFetch.cjs": "/static/media/getFetch.013f0b90.cjs"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.94f2678d.js",
+    "static/js/2.438758e4.chunk.js",
+    "static/css/main.d0471924.chunk.css",
+    "static/js/main.6d6afc51.chunk.js"
+  ]
+}
