@@ -20,6 +20,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Send.Func
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams;
     using Microsoft.Teams.Apps.CompanyCommunicator.Send.Func.Services;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Azure Function App triggered by messages from a Service Bus queue
@@ -227,10 +228,20 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Send.Func
                 NotificationDataTableNames.SendingNotificationsPartition,
                 message.NotificationId);
 
+            dynamic counterJson = JObject.Parse(notification.Content);
+            counterJson.actions[0].Replace(
+                    JObject.FromObject(
+                                new
+                                {
+                                    type = counterJson.actions[0].type,
+                                    url = counterJson.actions[0].url + "&notificationid=" + message.NotificationId + "&recipientid=" + message.RecipientData.RecipientId,
+                                    title = counterJson.actions[0].title,
+                                }));
+
             var adaptiveCardAttachment = new Attachment()
             {
                 ContentType = AdaptiveCardContentType,
-                Content = JsonConvert.DeserializeObject(notification.Content),
+                Content = counterJson,
             };
 
             return MessageFactory.Attachment(adaptiveCardAttachment);

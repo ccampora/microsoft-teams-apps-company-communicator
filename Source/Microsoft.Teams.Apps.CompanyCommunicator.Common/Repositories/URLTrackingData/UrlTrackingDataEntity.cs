@@ -18,5 +18,14 @@
         /// </summary>
         public int ClickedUrlCounter { get; set; }
 
+        /// <summary>
+        /// Gets or sets Recipientid.
+        /// </summary>
+        public string Recipientid { get; set; }
+
+        /// <summary>
+        /// Gets or sets Useremail.
+        /// </summary>
+        public string Useremail { get; set; }
     }
 }

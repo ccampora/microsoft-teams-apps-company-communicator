@@ -17,6 +17,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Repositories.URLTracki
         /// <summary>
         /// Default partition - should not be used.
         /// </summary>
-        public static readonly string DefaultPartition = "Default";
+        public static readonly string DefaultPartition = "ClickTracked";
     }
 }

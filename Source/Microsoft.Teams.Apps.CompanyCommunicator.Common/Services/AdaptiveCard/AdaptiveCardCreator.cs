@@ -13,7 +13,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
     /// </summary>
     public class AdaptiveCardCreator
     {
-        private readonly string redirecturl = "https://sabcommunicator01.azurewebsites.net/redirect?";
+        private readonly string hostName = string.Format("http://{0}.azurewebsites.net", Environment.ExpandEnvironmentVariables("%WEBSITE_SITE_NAME%"));
         private readonly string urlparam = "url=";
         private readonly string rowkeyparam = "rowkey=";
 
@@ -101,7 +101,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.AdaptiveCard
                 card.Actions.Add(new AdaptiveOpenUrlAction()
                 {
                     Title = buttonTitle,
-                    Url = new Uri(this.redirecturl + this.urlparam + buttonUrl + "&" + this.rowkeyparam + rowkey, UriKind.RelativeOrAbsolute),
+                    Url = new Uri(this.hostName + "/redirect?" + this.urlparam + buttonUrl + "&" + this.rowkeyparam + rowkey, UriKind.RelativeOrAbsolute),
                 });
             }
 

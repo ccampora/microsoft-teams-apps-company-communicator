@@ -17,6 +17,7 @@ import {
 import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
+import { ChangeEvent } from 'react';
 
 type dropdownItem = {
     key: string,
@@ -39,7 +40,8 @@ export interface IDraftMessage {
     teams: any[],
     rosters: any[],
     groups: any[],
-    allUsers: boolean
+    allUsers: boolean,
+    csvlist: any
 }
 
 export interface formState {
@@ -55,6 +57,7 @@ export interface formState {
     rostersOptionSelected: boolean,
     allUsersOptionSelected: boolean,
     groupsOptionSelected: boolean,
+    csvlistOptionSelected: boolean,
     teams?: any[],
     groups?: any[],
     exists?: boolean,
@@ -71,8 +74,10 @@ export interface formState {
     selectedTeams: dropdownItem[],
     selectedRosters: dropdownItem[],
     selectedGroups: dropdownItem[],
+    selectedCsvUsers: string[],
     errorImageUrlMessage: string,
     errorButtonUrlMessage: string,
+    csvfilename: string
 }
 
 export interface INewMessageProps extends RouteComponentProps, WithTranslation {
@@ -103,6 +108,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             rostersOptionSelected: false,
             allUsersOptionSelected: false,
             groupsOptionSelected: false,
+            csvlistOptionSelected: false,
             messageId: "",
             loader: true,
             groupAccess: false,
@@ -116,8 +122,10 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedTeams: [],
             selectedRosters: [],
             selectedGroups: [],
+            selectedCsvUsers: [],
             errorImageUrlMessage: "",
             errorButtonUrlMessage: "",
+            csvfilename: ""
         }
     }
 
@@ -275,6 +283,9 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             }
             else if (draftMessageDetail.allUsers) {
                 selectedRadioButton = "allUsers";
+            }
+            else if (draftMessageDetail.csvlist) {
+                selectedRadioButton = "csvlist";
             }
             this.setState({
                 teamsOptionSelected: draftMessageDetail.teams.length > 0,
@@ -464,6 +475,23 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                             <Text error content={this.localize("SendToGroupsNote")} />
                                         </div>
                                     </div>
+                                    <Radiobutton name="grouped" value="csvlist" label={ this.localize("sendToCsvList") } />
+                                    <input
+                                        type='file'
+                                        multiple={false}
+                                        id='csv'
+                                        name='csv'
+                                        accept='.csv'
+                                        onChange={this.handleFileChange}
+                                    ></input>
+                                    <Dropdown
+                                        id="csvusersdropdown"
+                                        className="hideToggle"
+                                        hidden={false}
+                                        multiple
+                                    />
+                                    <div className="noteTextcsv">
+                                    </div>
                                 </RadiobuttonGroup>
                             </div>
                             <div className="adaptiveCardContainer">
@@ -505,7 +533,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         const rostersSelectionIsValid = (this.state.rostersOptionSelected && (this.state.selectedRostersNum !== 0)) || (!this.state.rostersOptionSelected);
         const groupsSelectionIsValid = (this.state.groupsOptionSelected && (this.state.selectedGroupsNum !== 0)) || (!this.state.groupsOptionSelected);
         const nothingSelected = (!this.state.teamsOptionSelected) && (!this.state.rostersOptionSelected) && (!this.state.groupsOptionSelected) && (!this.state.allUsersOptionSelected);
-        return (!teamsSelectionIsValid || !rostersSelectionIsValid || !groupsSelectionIsValid || nothingSelected)
+        const csvSelectedIsValid = (this.state.csvlistOptionSelected && this.state.selectedCsvUsers.length > 0)
+        return (!teamsSelectionIsValid || !rostersSelectionIsValid || !groupsSelectionIsValid || !csvSelectedIsValid || nothingSelected )
     }
 
     private isNextBtnDisabled = () => {
@@ -566,6 +595,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedGroups: [],
             selectedGroupsNum: 0
         })
+
+        console.log(this.state.selectedRosters[0]);
     }
 
     private onGroupsChange = (event: any, itemsData: any) => {
@@ -650,7 +681,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             teams: selectedTeams,
             rosters: selctedRosters,
             groups: selectedGroups,
-            allUsers: this.state.allUsersOptionSelected
+            allUsers: this.state.allUsersOptionSelected,
+            csvlist: this.state.csvlistOptionSelected
         };
 
         if (this.state.exists) {
@@ -867,6 +899,38 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         }
         const link = this.state.btnLink;
         adaptiveCard.onExecuteAction = function (action) { window.open(link, '_blank'); }
+    }
+
+    private handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        var fileInput = event.currentTarget;
+        var reader = new FileReader();
+        var result;
+        var self = this;
+        reader.onload = (function (t) {
+            return function () {
+                const container = document.getElementsByClassName('noteTextcsv')[0];
+                result = (reader.result as string).split('\n');
+                t.setState({ selectedCsvUsers: result });
+                var dropdown = document.getElementById("csvusersdropdown");
+                result.forEach(function (item) {
+                    const optionObj = document.createElement("option");
+                    optionObj.textContent = item;
+
+                    if (dropdown != null) {
+                        dropdown.appendChild(optionObj);
+                    }
+                });
+            };
+        }) (this);
+        if (fileInput != null && fileInput.files != null) {
+            reader.readAsText(fileInput.files[0]);
+        }
+
+        if (event.currentTarget.files != null) {
+            console.log(event.currentTarget.files[0].name);
+        }
+        
     }
 }
 

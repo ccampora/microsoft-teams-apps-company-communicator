@@ -1,20 +1,21 @@
 ﻿namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Teams.Apps.CompanyCommunicator.Common.Repositories.NotificationData;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.Integration.AspNet.Core;
+    using Microsoft.Teams.Apps.CompanyCommunicator.Bot;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Repositories.URLTrackingData;
-    using Moq;
+    using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.MicrosoftGraph;
 
+    /// <summary>
+    /// Controller for Redirect endpoint.
+    /// </summary>
     [Route("redirect")]
     [ApiController]
     public class RedirectController : ControllerBase
     {
-        //private readonly Mock<IUrlTrackingDataRepository> urlTrackingDataRepository = new Mock<IUrlTrackingDataRepository>();
         private readonly IUrlTrackingDataRepository urlTrackingDataRepository;
 
         /// <summary>
@@ -24,18 +25,19 @@
         public RedirectController(
             IUrlTrackingDataRepository urlTrackingDataRepository)
         {
-            this.urlTrackingDataRepository = urlTrackingDataRepository;
+            this.urlTrackingDataRepository = urlTrackingDataRepository ?? throw new ArgumentNullException(nameof(urlTrackingDataRepository));
         }
-
 
         /// <summary>
         /// Add one to the url counter and then redirect to url.
         /// </summary>
         /// <param name="url">The url to redirect to.</param>
         /// <param name="rowkey">The rowkey from the notificationdataEntity</param>
+        /// <param name="notificationid"></param>
+        /// <param name="recipientid"></param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetAsync(string url, string rowkey)
+        public async Task<IActionResult> GetAsync(string url, string rowkey, string notificationid, string recipientid)
         {
             if (rowkey == null & url != null)
             {
@@ -44,21 +46,21 @@
 
             // Check notification status for the recipient.
             var urlTrackingData = await this.urlTrackingDataRepository.GetAsync(
-                partitionKey: UrlTrackingDataTableNames.DefaultPartition,
-                rowKey: rowkey);
+                partitionKey: notificationid,
+                rowKey: recipientid);
 
             if (urlTrackingData == null)
             {
                 // Create a sent notification based on the draft notification.
                 var createurlTrackingData = new UrlTrackingDataEntity
                 {
-                    PartitionKey = UrlTrackingDataTableNames.DefaultPartition,
-                    RowKey = rowkey,
-                    Id = rowkey,
-                    ClickedUrlCounter = 0,
+                    PartitionKey = notificationid,
+                    RowKey = recipientid,
+                    Id = recipientid,
+                    ClickedUrlCounter = 1,
+                    Recipientid = recipientid,
                 };
                 await this.urlTrackingDataRepository.InsertOrMergeAsync(createurlTrackingData);
-                await this.urlTrackingDataRepository.CreateOrUpdateAsync(createurlTrackingData);
             }
             else
             {

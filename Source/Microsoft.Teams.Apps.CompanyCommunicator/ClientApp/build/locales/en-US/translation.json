@@ -82,6 +82,5 @@
   "ExportErrorTitle": "Something went wrong.",
   "ExportErrorMessage": "Try exporting the results again. If the problem persists, contact your IT admin for help.",
   "ExportButtonText": "Export detailed results",
-  "ExportButtonProgressText": "Export in progress",
-  "sendToCsvList": "Send in chat to members by uploading a csv file containing a list of them"
+  "ExportButtonProgressText": "Export in progress"
 }
